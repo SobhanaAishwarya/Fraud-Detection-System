@@ -3,7 +3,7 @@ import pandas as pd
 
 os.system("kaggle datasets download -d mlg-ulb/creditcardfraud -p data --unzip")
 
-df = pd.read_csv("data/creditcard.csv")
+df = pd.read_csv("data/creditcard.csv").sample(5000)
 import streamlit as st
 import pandas as pd
 import numpy as np
