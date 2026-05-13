@@ -1,6 +1,8 @@
 import pandas as pd
 
-df = pd.read_csv("https://raw.githubusercontent.com/plotly/datasets/master/diabetes.csv")
+url = "https://raw.githubusercontent.com/plotly/datasets/master/diabetes.csv"
+df = pd.read_csv(url)
+df["target"] = df["Outcome"]
 import streamlit as st
 import pandas as pd
 import numpy as np
