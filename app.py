@@ -1,8 +1,10 @@
 import pandas as pd
+from sklearn.datasets import load_breast_cancer
 
-url = "https://raw.githubusercontent.com/plotly/datasets/master/diabetes.csv"
-df = pd.read_csv(url)
-df["Class"] = df["Outcome"]
+data = load_breast_cancer()
+
+df = pd.DataFrame(data.data, columns=data.feature_names)
+df["Class"] = data.target
 import streamlit as st
 import pandas as pd
 import numpy as np
