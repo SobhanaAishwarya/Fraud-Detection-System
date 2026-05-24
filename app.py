@@ -4,7 +4,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-from sklearn.datasets import load_breast_cancer
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
@@ -17,16 +16,13 @@ from imblearn.over_sampling import SMOTE
 # ---------------------------------------------------
 # TITLE
 # ---------------------------------------------------
-st.title("💳 Fraud Detection System (ML Demo App)")
-st.write("Machine Learning-based classification system")
+st.title("💳 Fraud Detection System (ML Project)")
+st.write("Machine Learning-based Fraud Detection App")
 
 # ---------------------------------------------------
-# LOAD DATASET (FIXED - NO CSV)
+# LOAD DATASET
 # ---------------------------------------------------
-data = load_breast_cancer()
-
-df = pd.DataFrame(data.data, columns=data.feature_names)
-df["Class"] = data.target
+df = pd.read_csv("fraud_detection_dataset_500.csv")
 
 st.subheader("Dataset Preview")
 st.write(df.head())
@@ -35,21 +31,32 @@ st.subheader("Dataset Shape")
 st.write(df.shape)
 
 # ---------------------------------------------------
-# CLASS DISTRIBUTION
+# AUTO DETECT TARGET COLUMN
 # ---------------------------------------------------
-st.subheader("Class Distribution")
+possible_targets = ["Class", "class", "Fraud", "fraud", "label", "target"]
 
-class_counts = df["Class"].value_counts()
+target_col = None
+for col in possible_targets:
+    if col in df.columns:
+        target_col = col
+        break
 
-fig0, ax0 = plt.subplots()
-ax0.pie(class_counts, labels=["Class 0", "Class 1"], autopct="%1.1f%%")
-st.pyplot(fig0)
+if target_col is None:
+    st.error("❌ No target column found! Please name it as Class/Fraud/label/target")
+    st.stop()
+
+st.write(f"🎯 Target Column Detected: **{target_col}**")
 
 # ---------------------------------------------------
-# FEATURES & TARGET
+# SPLIT FEATURES & TARGET
 # ---------------------------------------------------
-X = df.drop("Class", axis=1)
-y = df["Class"]
+X = df.drop(target_col, axis=1)
+y = df[target_col]
+
+# ---------------------------------------------------
+# HANDLE NON-NUMERIC DATA (IMPORTANT FIX)
+# ---------------------------------------------------
+X = pd.get_dummies(X)
 
 # ---------------------------------------------------
 # SCALING
@@ -58,18 +65,13 @@ scaler = StandardScaler()
 X_scaled = scaler.fit_transform(X)
 
 # ---------------------------------------------------
-# SMOTE
+# SMOTE (Only if imbalance exists)
 # ---------------------------------------------------
 smote = SMOTE(random_state=42)
 X_resampled, y_resampled = smote.fit_resample(X_scaled, y)
 
-st.subheader("SMOTE Applied")
-
-smote_df = pd.DataFrame({
-    "Before": y.value_counts(),
-    "After": pd.Series(y_resampled).value_counts()
-})
-st.write(smote_df)
+st.subheader("Class Distribution After SMOTE")
+st.write(pd.Series(y_resampled).value_counts())
 
 # ---------------------------------------------------
 # TRAIN TEST SPLIT
@@ -105,7 +107,7 @@ mlp_pred = mlp.predict(X_test)
 # ---------------------------------------------------
 # ACCURACY
 # ---------------------------------------------------
-st.subheader("Model Accuracy")
+st.subheader("Model Accuracy Comparison")
 
 accuracy_df = pd.DataFrame({
     "Model": ["Logistic Regression", "Decision Tree", "Neural Network"],
@@ -119,7 +121,7 @@ accuracy_df = pd.DataFrame({
 st.write(accuracy_df)
 
 # ---------------------------------------------------
-# ACCURACY GRAPH
+# BAR PLOT
 # ---------------------------------------------------
 fig1, ax1 = plt.subplots()
 sns.barplot(x="Model", y="Accuracy", data=accuracy_df, ax=ax1)
@@ -150,14 +152,14 @@ y_pred_iso = [1 if i == -1 else 0 for i in y_pred_iso]
 st.write("Anomalies detected:", sum(y_pred_iso))
 
 # ---------------------------------------------------
-# INPUT PREDICTION
+# USER INPUT PREDICTION
 # ---------------------------------------------------
-st.subheader("Predict New Data")
+st.subheader("Predict New Transaction")
 
 input_data = []
 
-for i in range(X.shape[1]):
-    val = st.number_input(f"Feature {i+1}", value=0.0)
+for col in X.columns:
+    val = st.number_input(f"{col}", value=0.0)
     input_data.append(val)
 
 input_array = np.array(input_data).reshape(1, -1)
@@ -167,11 +169,6 @@ if st.button("Predict"):
     prediction = mlp.predict(input_scaled)
 
     if prediction[0] == 1:
-        st.error("⚠ Fraudulent / Class 1")
+        st.error("⚠ Fraudulent Transaction Detected")
     else:
-        st.success("✅ Normal / Class 0")
-
-# ---------------------------------------------------
-# SUCCESS
-# ---------------------------------------------------
-st.success("🚀 App Running Successfully on Streamlit")
+        st.success("✅ Legitimate Transaction")
