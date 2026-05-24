@@ -172,3 +172,4 @@ if st.button("Predict"):
         st.error("⚠ Fraudulent Transaction Detected")
     else:
         st.success("✅ Legitimate Transaction")
+st.write("Updated version deployed 🚀")
