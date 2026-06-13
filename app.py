@@ -208,22 +208,18 @@ X_resampled, y_resampled = (
 # CLASS DISTRIBUTION AFTER SMOTE
 # ---------------------------------------------------
 
-st.subheader(
-    "Class Distribution After SMOTE"
-)
+st.subheader("Class Distribution After SMOTE")
 
-st.write(
-    pd.Series(
-        y_resampled
-    ).value_counts()
-)
-
-fig2, ax2 = plt.subplots()
+fig2, ax2 = plt.subplots(figsize=(5,4))
 
 sns.countplot(
     x=y_resampled,
     ax=ax2
 )
+
+ax2.set_xlabel("Class")
+ax2.set_ylabel("Count")
+ax2.set_title("Balanced Class Distribution")
 
 st.pyplot(fig2)
 
