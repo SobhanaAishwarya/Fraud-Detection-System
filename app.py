@@ -208,18 +208,40 @@ X_resampled, y_resampled = (
 # CLASS DISTRIBUTION AFTER SMOTE
 # ---------------------------------------------------
 
+
 st.subheader("Class Distribution After SMOTE")
 
-fig2, ax2 = plt.subplots(figsize=(5,4))
+# Create a neat table with equal-looking columns
+class_counts = pd.DataFrame({
+    "Class": ["Legitimate", "Fraud"],
+    "Count": [
+        (y_resampled == 0).sum(),
+        (y_resampled == 1).sum()
+    ]
+})
+
+# Display the table in a fixed-size container
+col1, col2, col3 = st.columns([1, 2, 1])
+
+with col2:
+    st.table(class_counts)
+
+# Count Plot
+fig2, ax2 = plt.subplots(figsize=(6, 4))
 
 sns.countplot(
     x=y_resampled,
-    ax=ax2
+    ax=ax2,
+    palette="Set2"
 )
 
-ax2.set_xlabel("Class")
+ax2.set_xticklabels(
+    ["Legitimate", "Fraud"]
+)
+
+ax2.set_xlabel("Transaction Type")
 ax2.set_ylabel("Count")
-ax2.set_title("Balanced Class Distribution")
+ax2.set_title("Balanced Class Distribution After SMOTE")
 
 st.pyplot(fig2)
 
