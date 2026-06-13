@@ -570,64 +570,6 @@ st.download_button(
 )
 
 # ---------------------------------------------------
-# USER PREDICTION
-# ---------------------------------------------------
-
-st.subheader(
-    "Predict New Transaction"
-)
-
-input_data = []
-
-for col in X.columns:
-
-    val = st.number_input(
-        f"{col}",
-        value=0.0
-    )
-
-    input_data.append(
-        val
-    )
-
-input_array = np.array(
-    input_data
-).reshape(
-    1,
-    -1
-)
-
-if st.button(
-    "Predict Transaction"
-):
-
-    input_scaled = scaler.transform(
-        input_array
-    )
-
-    prediction = mlp.predict(
-        input_scaled
-    )
-
-    probability = (
-        mlp.predict_proba(
-            input_scaled
-        )[0][1]
-    )
-
-    if prediction[0] == 1:
-
-        st.error(
-            f" Fraudulent Transaction Detected\nProbability: {probability:.2f}"
-        )
-
-    else:
-
-        st.success(
-            f"Legitimate Transaction\nProbability: {probability:.2f}"
-        )
-
-# ---------------------------------------------------
 # BUSINESS INSIGHTS
 # ---------------------------------------------------
 
