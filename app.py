@@ -284,25 +284,63 @@ with pie_col:
 
 with bar_col:
 
-    chart_card_open("Class Counts Before SMOTE")
+    categorical_candidates = [
+        "Transaction_Type", "Device_Type", "Location_Type",
+        "Merchant_Category", "Payment_Method",
+    ]
+    compare_col = next((c for c in categorical_candidates if c in df.columns), None)
 
-    fig1b, ax1b = plt.subplots(figsize=(5.6, 5.0), dpi=140)
+    if compare_col is not None:
 
-    sns.barplot(
-        x="Class",
-        y="Count",
-        data=before_counts,
-        ax=ax1b,
-        palette=[NAVY, GOLD],
-    )
+        chart_card_open(f"{compare_col.replace('_', ' ')} vs {labels[1]}")
 
-    ax1b.set_xlabel("")
-    ax1b.set_ylabel("Transactions")
-    for container in ax1b.containers:
-        ax1b.bar_label(container, fmt="%d", padding=3, fontsize=10, color=SLATE)
-    fig1b.tight_layout()
+        fig1b, ax1b = plt.subplots(figsize=(5.6, 5.0), dpi=140)
 
-    st.pyplot(fig1b, use_container_width=True)
+        plot_df = df.copy()
+        plot_df[target_col] = plot_df[target_col].map({0: "Legitimate", 1: "Fraud"})
+
+        sns.countplot(
+            x=compare_col,
+            hue=target_col,
+            data=plot_df,
+            ax=ax1b,
+            palette=[NAVY, GOLD],
+        )
+
+        ax1b.set_xlabel("")
+        ax1b.set_ylabel("Transactions")
+        ax1b.tick_params(axis="x", rotation=15)
+        ax1b.legend(title="", frameon=False)
+        fig1b.tight_layout()
+
+        st.pyplot(fig1b, use_container_width=True)
+
+    elif "Transaction_Amount" in df.columns:
+
+        chart_card_open(f"Transaction Amount vs {labels[1]}")
+
+        fig1b, ax1b = plt.subplots(figsize=(5.6, 5.0), dpi=140)
+
+        plot_df = df.copy()
+        plot_df[target_col] = plot_df[target_col].map({0: "Legitimate", 1: "Fraud"})
+
+        sns.boxplot(
+            x=target_col,
+            y="Transaction_Amount",
+            data=plot_df,
+            ax=ax1b,
+            palette=[NAVY, GOLD],
+        )
+
+        ax1b.set_xlabel("")
+        fig1b.tight_layout()
+
+        st.pyplot(fig1b, use_container_width=True)
+
+    else:
+
+        chart_card_open("Feature Comparison")
+        st.caption("No comparable feature found in this dataset.")
 
     chart_card_close()
 
