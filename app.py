@@ -44,7 +44,7 @@ st.markdown(
     """
     <style>
     .stApp { background: #F5F7FA; font-family: 'Inter', 'Segoe UI', sans-serif; }
-    .block-container { padding-top: 2.2rem; padding-bottom: 3rem; max-width: 1220px; }
+    .block-container { padding-top: 4.5rem; padding-bottom: 3rem; max-width: 1220px; }
     h1, h2, h3 { color: #0F1B2D; font-weight: 700; }
 
     .app-header { margin-bottom: 6px; }
