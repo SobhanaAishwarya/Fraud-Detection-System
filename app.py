@@ -1,4 +1,3 @@
-
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -26,12 +25,110 @@ from imblearn.over_sampling import SMOTE
 
 st.set_page_config(
     page_title="Fraud Detection Dashboard",
-    layout="wide"
+    layout="wide",
 )
 
-st.title("Fraud Detection Analytics Dashboard")
-st.write(
-    "Machine Learning based Credit Card Fraud Detection System"
+# ---------------------------------------------------
+# THEME
+# ---------------------------------------------------
+
+NAVY = "#0F1B2D"
+SLATE = "#334155"
+SLATE_LIGHT = "#64748B"
+ACCENT = "#2563EB"
+GOLD = "#C8973C"
+LINE = "#E4E7EC"
+PALETTE = [ACCENT, GOLD, NAVY, SLATE_LIGHT]
+
+st.markdown(
+    """
+    <style>
+    .stApp { background: #F5F7FA; font-family: 'Inter', 'Segoe UI', sans-serif; }
+    .block-container { padding-top: 2.2rem; padding-bottom: 3rem; max-width: 1220px; }
+    h1, h2, h3 { color: #0F1B2D; font-weight: 700; }
+
+    .app-header { margin-bottom: 6px; }
+    .app-header .eyebrow {
+        font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
+        text-transform: uppercase; color: #2563EB; margin-bottom: 4px;
+    }
+    .app-header h1 { font-size: 26px; margin: 0; }
+    .app-header p { font-size: 14px; color: #64748B; margin: 4px 0 0; }
+
+    [data-testid="stMetric"] {
+        background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 14px;
+        padding: 16px 18px; box-shadow: 0 2px 10px rgba(15,27,45,0.06);
+    }
+    [data-testid="stMetricLabel"] { color: #64748B; font-weight: 600; }
+    [data-testid="stMetricValue"] { color: #0F1B2D; font-weight: 800; }
+
+    .section-title {
+        font-size: 12.5px; font-weight: 700; text-transform: uppercase;
+        letter-spacing: 0.06em; color: #64748B; margin: 30px 0 14px;
+    }
+
+    .chart-card {
+        background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 14px;
+        padding: 18px 20px 6px; box-shadow: 0 2px 10px rgba(15,27,45,0.06);
+        margin-bottom: 18px;
+    }
+    .chart-card h4 {
+        margin: 0 0 8px; font-size: 13px; font-weight: 700; color: #0F1B2D;
+    }
+
+    .insight-card {
+        background: #FFFFFF; border: 1px solid #E4E7EC; border-left: 4px solid #2563EB;
+        border-radius: 12px; padding: 18px 22px; box-shadow: 0 2px 10px rgba(15,27,45,0.06);
+    }
+    .insight-card ul { margin: 0; padding-left: 18px; }
+    .insight-card li { color: #334155; font-size: 14px; margin-bottom: 8px; line-height: 1.5; }
+
+    [data-testid="stDataFrame"] { border: 1px solid #E4E7EC; border-radius: 12px; }
+    [data-testid="stTable"] { border: 1px solid #E4E7EC; border-radius: 12px; }
+    [data-testid="stFileUploader"] {
+        background: #FFFFFF; border: 1.5px dashed #2563EB; border-radius: 12px;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+plt.rcParams.update({
+    "figure.facecolor": "white",
+    "axes.facecolor": "white",
+    "axes.edgecolor": LINE,
+    "axes.labelcolor": SLATE,
+    "text.color": NAVY,
+    "xtick.color": SLATE,
+    "ytick.color": SLATE,
+    "axes.grid": True,
+    "grid.color": "#EEF1F5",
+    "grid.linewidth": 0.7,
+    "axes.spines.top": False,
+    "axes.spines.right": False,
+    "font.size": 10,
+})
+sns.set_style("white")
+sns.set_palette(PALETTE)
+
+
+def chart_card_open(title: str) -> None:
+    st.markdown(f'<div class="chart-card"><h4>{title}</h4>', unsafe_allow_html=True)
+
+
+def chart_card_close() -> None:
+    st.markdown("</div>", unsafe_allow_html=True)
+
+
+st.markdown(
+    """
+    <div class="app-header">
+      <div class="eyebrow">Risk Analytics</div>
+      <h1>Fraud Detection Analytics Dashboard</h1>
+      <p>Machine learning based credit card fraud detection system.</p>
+    </div>
+    """,
+    unsafe_allow_html=True,
 )
 
 # ---------------------------------------------------
@@ -58,11 +155,9 @@ else:
 # DATASET PREVIEW
 # ---------------------------------------------------
 
-st.subheader("Dataset Preview")
-st.dataframe(df.head())
-
-st.subheader("Dataset Shape")
-st.write(df.shape)
+st.markdown('<div class="section-title">Dataset Preview</div>', unsafe_allow_html=True)
+st.dataframe(df.head(), use_container_width=True)
+st.caption(f"Shape: {df.shape[0]} rows x {df.shape[1]} columns")
 
 # ---------------------------------------------------
 # AUTO DETECT TARGET
@@ -86,12 +181,12 @@ for col in possible_targets:
 
 if target_col is None:
     st.error(
-        " No target column found!"
+        "No target column found!"
     )
     st.stop()
 
 st.success(
-    f"Target Column Detected: {target_col}"
+    f"Target column detected: {target_col}"
 )
 
 # ---------------------------------------------------
@@ -113,6 +208,8 @@ fraud_rate = (
     fraud_transactions /
     total_transactions
 ) * 100
+
+st.markdown('<div class="section-title">Key Metrics</div>', unsafe_allow_html=True)
 
 c1, c2, c3, c4 = st.columns(4)
 
@@ -140,29 +237,41 @@ c4.metric(
 # PIE CHART
 # ---------------------------------------------------
 
-st.subheader(
-    "Fraud Distribution"
-)
+st.markdown('<div class="section-title">Fraud Distribution</div>', unsafe_allow_html=True)
 
 labels = [
     "Legitimate",
     "Fraud"
 ]
 
-sizes = df[target_col].value_counts()
+sizes = df[target_col].value_counts().reindex([0, 1]).fillna(0)
 
-fig1, ax1 = plt.subplots(
-    figsize=(5, 5)
-)
+pie_col, _ = st.columns([1, 2])
 
-ax1.pie(
-    sizes,
-    labels=labels,
-    autopct="%1.1f%%",
-    startangle=90
-)
+with pie_col:
 
-st.pyplot(fig1)
+    chart_card_open("Legitimate vs Fraud")
+
+    fig1, ax1 = plt.subplots(figsize=(4.3, 4.3), dpi=140)
+
+    wedges, _, autotexts = ax1.pie(
+        sizes,
+        labels=labels,
+        autopct="%1.1f%%",
+        startangle=90,
+        colors=[NAVY, GOLD],
+        wedgeprops={"linewidth": 2, "edgecolor": "white"},
+        textprops={"fontsize": 10.5, "color": SLATE},
+    )
+    for autotext in autotexts:
+        autotext.set_color("white")
+        autotext.set_fontweight("bold")
+
+    fig1.tight_layout()
+
+    st.pyplot(fig1, use_container_width=False)
+
+    chart_card_close()
 
 # ---------------------------------------------------
 # FEATURES & TARGET
@@ -208,10 +317,8 @@ X_resampled, y_resampled = (
 # CLASS DISTRIBUTION AFTER SMOTE
 # ---------------------------------------------------
 
+st.markdown('<div class="section-title">Class Distribution After SMOTE</div>', unsafe_allow_html=True)
 
-st.subheader("Class Distribution After SMOTE")
-
-# Create a neat table with equal-looking columns
 class_counts = pd.DataFrame({
     "Class": ["Legitimate", "Fraud"],
     "Count": [
@@ -220,30 +327,31 @@ class_counts = pd.DataFrame({
     ]
 })
 
-# Display the table in a fixed-size container
-col1, col2, col3 = st.columns([1, 2, 1])
+table_col, _ = st.columns([1, 2])
+with table_col:
+    st.dataframe(class_counts, use_container_width=True, hide_index=True)
 
-with col2:
-    st.table(class_counts)
+chart_card_open("Balanced Class Distribution After SMOTE")
 
-# Count Plot
-fig2, ax2 = plt.subplots(figsize=(6, 4))
+fig2, ax2 = plt.subplots(figsize=(11, 4.2), dpi=140)
 
 sns.countplot(
     x=y_resampled,
     ax=ax2,
-    palette="Set2"
+    palette=[NAVY, GOLD],
 )
 
 ax2.set_xticklabels(
     ["Legitimate", "Fraud"]
 )
 
-ax2.set_xlabel("Transaction Type")
+ax2.set_xlabel("")
 ax2.set_ylabel("Count")
-ax2.set_title("Balanced Class Distribution After SMOTE")
+fig2.tight_layout()
 
-st.pyplot(fig2)
+st.pyplot(fig2, use_container_width=True)
+
+chart_card_close()
 
 # ---------------------------------------------------
 # TRAIN TEST SPLIT
@@ -315,9 +423,7 @@ mlp_pred = mlp.predict(
 # ACCURACY TABLE
 # ---------------------------------------------------
 
-st.subheader(
-    "Model Accuracy Comparison"
-)
+st.markdown('<div class="section-title">Model Accuracy Comparison</div>', unsafe_allow_html=True)
 
 accuracy_df = pd.DataFrame(
     {
@@ -347,37 +453,44 @@ accuracy_df = pd.DataFrame(
 )
 
 st.dataframe(
-    accuracy_df
+    accuracy_df,
+    use_container_width=True,
+    hide_index=True,
 )
 
-fig3, ax3 = plt.subplots(
-    figsize=(7, 5)
-)
+chart_card_open("Accuracy by Model")
+
+fig3, ax3 = plt.subplots(figsize=(11, 4.2), dpi=140)
 
 sns.barplot(
     x="Model",
     y="Accuracy",
     data=accuracy_df,
-    ax=ax3
+    ax=ax3,
+    palette=PALETTE[:3],
 )
 
-plt.ylim(0, 1)
+ax3.set_ylim(0, 1)
+ax3.set_xlabel("")
+fig3.tight_layout()
 
-st.pyplot(fig3)
+st.pyplot(fig3, use_container_width=True)
+
+chart_card_close()
 
 # ---------------------------------------------------
 # ALL CONFUSION MATRICES
 # ---------------------------------------------------
 
-st.subheader(
-    "Confusion Matrices"
-)
+st.markdown('<div class="section-title">Confusion Matrices</div>', unsafe_allow_html=True)
 
 c1, c2, c3 = st.columns(3)
 
 with c1:
 
-    fig, ax = plt.subplots()
+    chart_card_open("Logistic Regression")
+
+    fig, ax = plt.subplots(figsize=(4, 3.6), dpi=140)
 
     sns.heatmap(
         confusion_matrix(
@@ -387,18 +500,20 @@ with c1:
         annot=True,
         fmt="d",
         cmap="Blues",
-        ax=ax
+        ax=ax,
+        cbar=False,
     )
+    fig.tight_layout()
 
-    ax.set_title(
-        "Logistic Regression"
-    )
+    st.pyplot(fig, use_container_width=True)
 
-    st.pyplot(fig)
+    chart_card_close()
 
 with c2:
 
-    fig, ax = plt.subplots()
+    chart_card_open("Decision Tree")
+
+    fig, ax = plt.subplots(figsize=(4, 3.6), dpi=140)
 
     sns.heatmap(
         confusion_matrix(
@@ -407,19 +522,21 @@ with c2:
         ),
         annot=True,
         fmt="d",
-        cmap="Greens",
-        ax=ax
+        cmap="Blues",
+        ax=ax,
+        cbar=False,
     )
+    fig.tight_layout()
 
-    ax.set_title(
-        "Decision Tree"
-    )
+    st.pyplot(fig, use_container_width=True)
 
-    st.pyplot(fig)
+    chart_card_close()
 
 with c3:
 
-    fig, ax = plt.subplots()
+    chart_card_open("Neural Network")
+
+    fig, ax = plt.subplots(figsize=(4, 3.6), dpi=140)
 
     sns.heatmap(
         confusion_matrix(
@@ -428,23 +545,21 @@ with c3:
         ),
         annot=True,
         fmt="d",
-        cmap="Reds",
-        ax=ax
+        cmap="Blues",
+        ax=ax,
+        cbar=False,
     )
+    fig.tight_layout()
 
-    ax.set_title(
-        "Neural Network"
-    )
+    st.pyplot(fig, use_container_width=True)
 
-    st.pyplot(fig)
+    chart_card_close()
 
 # ---------------------------------------------------
 # AUC ROC CURVE
 # ---------------------------------------------------
 
-st.subheader(
-    "AUC-ROC Curve"
-)
+st.markdown('<div class="section-title">AUC-ROC Curve</div>', unsafe_allow_html=True)
 
 y_prob = (
     lr.predict_proba(
@@ -464,37 +579,44 @@ fpr, tpr, thresholds = (
     )
 )
 
-fig4, ax4 = plt.subplots(
-    figsize=(7, 5)
-)
+roc_col, _ = st.columns([1, 1])
 
-ax4.plot(
-    fpr,
-    tpr,
-    label=f"AUC = {auc_score:.2f}"
-)
+with roc_col:
 
-ax4.plot(
-    [0, 1],
-    [0, 1],
-    linestyle="--"
-)
+    chart_card_open(f"ROC Curve — Logistic Regression (AUC = {auc_score:.2f})")
 
-ax4.legend()
+    fig4, ax4 = plt.subplots(figsize=(5.2, 4.4), dpi=140)
 
-ax4.set_title(
-    "ROC Curve"
-)
+    ax4.plot(
+        fpr,
+        tpr,
+        color=ACCENT,
+        linewidth=2.4,
+        label=f"AUC = {auc_score:.2f}",
+    )
 
-st.pyplot(fig4)
+    ax4.plot(
+        [0, 1],
+        [0, 1],
+        linestyle="--",
+        color=SLATE_LIGHT,
+        linewidth=1.3,
+    )
+
+    ax4.set_xlabel("False Positive Rate")
+    ax4.set_ylabel("True Positive Rate")
+    ax4.legend(frameon=False)
+    fig4.tight_layout()
+
+    st.pyplot(fig4, use_container_width=False)
+
+    chart_card_close()
 
 # ---------------------------------------------------
 # ISOLATION FOREST
 # ---------------------------------------------------
 
-st.subheader(
-    "Anomaly Detection Dashboard"
-)
+st.markdown('<div class="section-title">Anomaly Detection</div>', unsafe_allow_html=True)
 
 iso = IsolationForest(
     contamination=0.01,
@@ -537,9 +659,7 @@ c2.metric(
 # EXCEL REPORT EXPORT
 # ---------------------------------------------------
 
-st.subheader(
-    "Download Prediction Report"
-)
+st.markdown('<div class="section-title">Download Prediction Report</div>', unsafe_allow_html=True)
 
 prob = (
     mlp.predict_proba(
@@ -581,7 +701,7 @@ with pd.ExcelWriter(
     )
 
 st.download_button(
-    label="📥 Download Excel Report",
+    label="Download Excel Report",
     data=buffer.getvalue(),
     file_name="Fraud_Report.xlsx",
     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
@@ -591,24 +711,19 @@ st.download_button(
 # BUSINESS INSIGHTS
 # ---------------------------------------------------
 
-st.subheader(
-    "Business Insights"
-)
+st.markdown('<div class="section-title">Business Insights</div>', unsafe_allow_html=True)
 
-st.success(
-"""
-• Fraud transactions constitute a very small percentage of total transactions.
-
-• Neural Network and Decision Tree achieved excellent performance.
-
-• Isolation Forest effectively detected suspicious anomalies.
-
-• AUC-ROC indicates strong fraud classification capability.
-
-• Dashboard can assist financial institutions in real-time fraud monitoring.
-"""
-)
-
-st.success(
-    "Fraud Detection Dashboard Executed Successfully"
+st.markdown(
+    """
+    <div class="insight-card">
+      <ul>
+        <li>Fraud transactions constitute a very small percentage of total transactions.</li>
+        <li>Neural Network and Decision Tree achieved excellent performance.</li>
+        <li>Isolation Forest effectively detected suspicious anomalies.</li>
+        <li>AUC-ROC indicates strong fraud classification capability.</li>
+        <li>Dashboard can assist financial institutions in real-time fraud monitoring.</li>
+      </ul>
+    </div>
+    """,
+    unsafe_allow_html=True,
 )
