@@ -237,7 +237,7 @@ c4.metric(
 # PIE CHART
 # ---------------------------------------------------
 
-st.markdown('<div class="section-title">Fraud Distribution</div>', unsafe_allow_html=True)
+st.markdown('<div class="section-title">Class Distribution — Before SMOTE</div>', unsafe_allow_html=True)
 
 labels = [
     "Legitimate",
@@ -246,13 +246,22 @@ labels = [
 
 sizes = df[target_col].value_counts().reindex([0, 1]).fillna(0)
 
-pie_col, _ = st.columns([1, 2])
+before_counts = pd.DataFrame({
+    "Class": labels,
+    "Count": sizes.values.astype(int),
+})
+
+table_before_col, _ = st.columns([1, 2])
+with table_before_col:
+    st.dataframe(before_counts, use_container_width=True, hide_index=True)
+
+pie_col, bar_col = st.columns(2)
 
 with pie_col:
 
     chart_card_open("Legitimate vs Fraud")
 
-    fig1, ax1 = plt.subplots(figsize=(4.3, 4.3), dpi=140)
+    fig1, ax1 = plt.subplots(figsize=(5.0, 5.0), dpi=140)
 
     wedges, _, autotexts = ax1.pie(
         sizes,
@@ -261,7 +270,7 @@ with pie_col:
         startangle=90,
         colors=[NAVY, GOLD],
         wedgeprops={"linewidth": 2, "edgecolor": "white"},
-        textprops={"fontsize": 10.5, "color": SLATE},
+        textprops={"fontsize": 11.5, "color": SLATE},
     )
     for autotext in autotexts:
         autotext.set_color("white")
@@ -270,6 +279,30 @@ with pie_col:
     fig1.tight_layout()
 
     st.pyplot(fig1, use_container_width=False)
+
+    chart_card_close()
+
+with bar_col:
+
+    chart_card_open("Class Counts Before SMOTE")
+
+    fig1b, ax1b = plt.subplots(figsize=(5.6, 5.0), dpi=140)
+
+    sns.barplot(
+        x="Class",
+        y="Count",
+        data=before_counts,
+        ax=ax1b,
+        palette=[NAVY, GOLD],
+    )
+
+    ax1b.set_xlabel("")
+    ax1b.set_ylabel("Transactions")
+    for container in ax1b.containers:
+        ax1b.bar_label(container, fmt="%d", padding=3, fontsize=10, color=SLATE)
+    fig1b.tight_layout()
+
+    st.pyplot(fig1b, use_container_width=True)
 
     chart_card_close()
 
@@ -317,7 +350,7 @@ X_resampled, y_resampled = (
 # CLASS DISTRIBUTION AFTER SMOTE
 # ---------------------------------------------------
 
-st.markdown('<div class="section-title">Class Distribution After SMOTE</div>', unsafe_allow_html=True)
+st.markdown('<div class="section-title">Class Distribution — After SMOTE</div>', unsafe_allow_html=True)
 
 class_counts = pd.DataFrame({
     "Class": ["Legitimate", "Fraud"],
