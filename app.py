@@ -251,10 +251,6 @@ before_counts = pd.DataFrame({
     "Count": sizes.values.astype(int),
 })
 
-table_before_col, _ = st.columns([1, 2])
-with table_before_col:
-    st.dataframe(before_counts, use_container_width=True, hide_index=True)
-
 pie_col, bar_col = st.columns(2)
 
 with pie_col:
