@@ -385,44 +385,70 @@ X_resampled, y_resampled = (
 )
 
 # ---------------------------------------------------
-# CLASS DISTRIBUTION AFTER SMOTE
+# CLASS DISTRIBUTION: BEFORE VS AFTER SMOTE
 # ---------------------------------------------------
 
-st.markdown('<div class="section-title">Class Distribution — After SMOTE</div>', unsafe_allow_html=True)
+st.markdown('<div class="section-title">Class Distribution — Before vs After SMOTE</div>', unsafe_allow_html=True)
 
-class_counts = pd.DataFrame({
+after_counts = pd.DataFrame({
     "Class": ["Legitimate", "Fraud"],
     "Count": [
-        (y_resampled == 0).sum(),
-        (y_resampled == 1).sum()
+        int((y_resampled == 0).sum()),
+        int((y_resampled == 1).sum())
     ]
 })
 
-table_col, _ = st.columns([1, 2])
-with table_col:
-    st.dataframe(class_counts, use_container_width=True, hide_index=True)
+before_col, after_col = st.columns(2)
 
-chart_card_open("Balanced Class Distribution After SMOTE")
+with before_col:
+    st.dataframe(before_counts, use_container_width=True, hide_index=True)
 
-fig2, ax2 = plt.subplots(figsize=(11, 4.2), dpi=140)
+    chart_card_open("Before SMOTE")
 
-sns.countplot(
-    x=y_resampled,
-    ax=ax2,
-    palette=[NAVY, GOLD],
-)
+    fig_before, ax_before = plt.subplots(figsize=(5.6, 4.2), dpi=140)
 
-ax2.set_xticklabels(
-    ["Legitimate", "Fraud"]
-)
+    sns.barplot(
+        x="Class",
+        y="Count",
+        data=before_counts,
+        ax=ax_before,
+        palette=[NAVY, GOLD],
+    )
 
-ax2.set_xlabel("")
-ax2.set_ylabel("Count")
-fig2.tight_layout()
+    ax_before.set_xlabel("")
+    ax_before.set_ylabel("Transactions")
+    for container in ax_before.containers:
+        ax_before.bar_label(container, fmt="%d", padding=3, fontsize=10, color=SLATE)
+    fig_before.tight_layout()
 
-st.pyplot(fig2, use_container_width=True)
+    st.pyplot(fig_before, use_container_width=True)
 
-chart_card_close()
+    chart_card_close()
+
+with after_col:
+    st.dataframe(after_counts, use_container_width=True, hide_index=True)
+
+    chart_card_open("After SMOTE")
+
+    fig_after, ax_after = plt.subplots(figsize=(5.6, 4.2), dpi=140)
+
+    sns.barplot(
+        x="Class",
+        y="Count",
+        data=after_counts,
+        ax=ax_after,
+        palette=[NAVY, GOLD],
+    )
+
+    ax_after.set_xlabel("")
+    ax_after.set_ylabel("Transactions")
+    for container in ax_after.containers:
+        ax_after.bar_label(container, fmt="%d", padding=3, fontsize=10, color=SLATE)
+    fig_after.tight_layout()
+
+    st.pyplot(fig_after, use_container_width=True)
+
+    chart_card_close()
 
 # ---------------------------------------------------
 # TRAIN TEST SPLIT
