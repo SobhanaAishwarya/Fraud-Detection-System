@@ -49,7 +49,7 @@ st.markdown(
     """
     <style>
     .stApp {
-        background: linear-gradient(180deg, #FCF1F3 0%, #FBF6F7 320px, #FBF6F7 100%);
+        background: linear-gradient(180deg, #FAD3DC 0%, #FCE1E7 220px, #FDF0F2 520px, #FCF5F6 100%);
         font-family: 'Inter', 'Segoe UI', sans-serif;
     }
     .block-container { padding-top: 4.5rem; padding-bottom: 3rem; max-width: 1220px; }
