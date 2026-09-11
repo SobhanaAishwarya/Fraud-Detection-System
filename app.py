@@ -31,62 +31,75 @@ st.set_page_config(
 # ---------------------------------------------------
 # THEME
 # ---------------------------------------------------
+# Fraud vs. legitimate reads intuitively as crimson (danger) vs. emerald
+# (safe) — a bold, single-dominant-hue identity in the same spirit as this
+# portfolio's other apps, rather than the previous muted navy/slate/gold combo.
 
-NAVY = "#0F1B2D"
-SLATE = "#334155"
-SLATE_LIGHT = "#64748B"
-ACCENT = "#2563EB"
-GOLD = "#C8973C"
-LINE = "#E4E7EC"
-PALETTE = [ACCENT, GOLD, NAVY, SLATE_LIGHT]
+CHARCOAL = "#20141A"
+SLATE = "#5B4B50"
+SLATE_LIGHT = "#8C7A80"
+CRIMSON = "#E11D48"
+CRIMSON_DARK = "#9F1239"
+EMERALD = "#059669"
+GOLD = "#F59E0B"
+LINE = "#F3E1E5"
+PALETTE = [CRIMSON, EMERALD, GOLD, SLATE_LIGHT]
 
 st.markdown(
     """
     <style>
-    .stApp { background: #F5F7FA; font-family: 'Inter', 'Segoe UI', sans-serif; }
+    .stApp {
+        background: linear-gradient(180deg, #FCF1F3 0%, #FBF6F7 320px, #FBF6F7 100%);
+        font-family: 'Inter', 'Segoe UI', sans-serif;
+    }
     .block-container { padding-top: 4.5rem; padding-bottom: 3rem; max-width: 1220px; }
-    h1, h2, h3 { color: #0F1B2D; font-weight: 700; }
+    h1, h2, h3 { color: #20141A; font-weight: 700; }
 
-    .app-header { margin-bottom: 6px; }
+    .app-header {
+        margin: -1.5rem -1.5rem 20px; padding: 26px 28px;
+        background: linear-gradient(135deg, #E11D48 0%, #9F1239 100%);
+        border-radius: 0 0 20px 20px;
+        box-shadow: 0 8px 24px rgba(225,29,72,0.25);
+    }
     .app-header .eyebrow {
         font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
-        text-transform: uppercase; color: #2563EB; margin-bottom: 4px;
+        text-transform: uppercase; color: #FFD9E1; margin-bottom: 4px;
     }
-    .app-header h1 { font-size: 26px; margin: 0; }
-    .app-header p { font-size: 14px; color: #64748B; margin: 4px 0 0; }
+    .app-header h1 { font-size: 26px; margin: 0; color: #FFFFFF; }
+    .app-header p { font-size: 14px; color: #FFE7EC; margin: 4px 0 0; }
 
     [data-testid="stMetric"] {
-        background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 14px;
-        padding: 16px 18px; box-shadow: 0 2px 10px rgba(15,27,45,0.06);
+        background: #FFFFFF; border: 1px solid #F3E1E5; border-radius: 14px;
+        padding: 16px 18px; box-shadow: 0 2px 10px rgba(225,29,72,0.08);
     }
-    [data-testid="stMetricLabel"] { color: #64748B; font-weight: 600; }
-    [data-testid="stMetricValue"] { color: #0F1B2D; font-weight: 800; }
+    [data-testid="stMetricLabel"] { color: #5B4B50; font-weight: 600; }
+    [data-testid="stMetricValue"] { color: #9F1239; font-weight: 800; }
 
     .section-title {
         font-size: 12.5px; font-weight: 700; text-transform: uppercase;
-        letter-spacing: 0.06em; color: #64748B; margin: 30px 0 14px;
+        letter-spacing: 0.06em; color: #E11D48; margin: 30px 0 14px;
     }
 
     .chart-card {
-        background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 14px;
-        padding: 18px 20px 6px; box-shadow: 0 2px 10px rgba(15,27,45,0.06);
+        background: #FFFFFF; border: 1px solid #F3E1E5; border-radius: 14px;
+        padding: 18px 20px 6px; box-shadow: 0 2px 10px rgba(225,29,72,0.08);
         margin-bottom: 18px;
     }
     .chart-card h4 {
-        margin: 0 0 8px; font-size: 13px; font-weight: 700; color: #0F1B2D;
+        margin: 0 0 8px; font-size: 13px; font-weight: 700; color: #20141A;
     }
 
     .insight-card {
-        background: #FFFFFF; border: 1px solid #E4E7EC; border-left: 4px solid #2563EB;
-        border-radius: 12px; padding: 18px 22px; box-shadow: 0 2px 10px rgba(15,27,45,0.06);
+        background: #FFFFFF; border: 1px solid #F3E1E5; border-left: 4px solid #059669;
+        border-radius: 12px; padding: 18px 22px; box-shadow: 0 2px 10px rgba(225,29,72,0.08);
     }
     .insight-card ul { margin: 0; padding-left: 18px; }
-    .insight-card li { color: #334155; font-size: 14px; margin-bottom: 8px; line-height: 1.5; }
+    .insight-card li { color: #5B4B50; font-size: 14px; margin-bottom: 8px; line-height: 1.5; }
 
-    [data-testid="stDataFrame"] { border: 1px solid #E4E7EC; border-radius: 12px; }
-    [data-testid="stTable"] { border: 1px solid #E4E7EC; border-radius: 12px; }
+    [data-testid="stDataFrame"] { border: 1px solid #F3E1E5; border-radius: 12px; }
+    [data-testid="stTable"] { border: 1px solid #F3E1E5; border-radius: 12px; }
     [data-testid="stFileUploader"] {
-        background: #FFFFFF; border: 1.5px dashed #2563EB; border-radius: 12px;
+        background: #FFFFFF; border: 1.5px dashed #E11D48; border-radius: 12px;
     }
     </style>
     """,
@@ -98,11 +111,11 @@ plt.rcParams.update({
     "axes.facecolor": "white",
     "axes.edgecolor": LINE,
     "axes.labelcolor": SLATE,
-    "text.color": NAVY,
+    "text.color": CHARCOAL,
     "xtick.color": SLATE,
     "ytick.color": SLATE,
     "axes.grid": True,
-    "grid.color": "#EEF1F5",
+    "grid.color": "#F7EBED",
     "grid.linewidth": 0.7,
     "axes.spines.top": False,
     "axes.spines.right": False,
@@ -110,6 +123,7 @@ plt.rcParams.update({
 })
 sns.set_style("white")
 sns.set_palette(PALETTE)
+CRIMSON_CMAP = sns.light_palette(CRIMSON_DARK, as_cmap=True)
 
 
 def chart_card_open(title: str) -> None:
@@ -264,7 +278,7 @@ with pie_col:
         labels=labels,
         autopct="%1.1f%%",
         startangle=90,
-        colors=[NAVY, GOLD],
+        colors=[EMERALD, CRIMSON],
         wedgeprops={"linewidth": 2, "edgecolor": "white"},
         textprops={"fontsize": 11.5, "color": SLATE},
     )
@@ -300,7 +314,7 @@ with bar_col:
             hue=target_col,
             data=plot_df,
             ax=ax1b,
-            palette=[NAVY, GOLD],
+            palette=[EMERALD, CRIMSON],
         )
 
         ax1b.set_xlabel("")
@@ -325,7 +339,7 @@ with bar_col:
             y="Transaction_Amount",
             data=plot_df,
             ax=ax1b,
-            palette=[NAVY, GOLD],
+            palette=[EMERALD, CRIMSON],
         )
 
         ax1b.set_xlabel("")
@@ -408,7 +422,7 @@ with before_col:
         y="Count",
         data=before_counts,
         ax=ax_before,
-        palette=[NAVY, GOLD],
+        palette=[EMERALD, CRIMSON],
     )
 
     ax_before.set_xlabel("")
@@ -433,7 +447,7 @@ with after_col:
         y="Count",
         data=after_counts,
         ax=ax_after,
-        palette=[NAVY, GOLD],
+        palette=[EMERALD, CRIMSON],
     )
 
     ax_after.set_xlabel("")
@@ -592,7 +606,7 @@ with c1:
         ),
         annot=True,
         fmt="d",
-        cmap="Blues",
+        cmap=CRIMSON_CMAP,
         ax=ax,
         cbar=False,
     )
@@ -615,7 +629,7 @@ with c2:
         ),
         annot=True,
         fmt="d",
-        cmap="Blues",
+        cmap=CRIMSON_CMAP,
         ax=ax,
         cbar=False,
     )
@@ -638,7 +652,7 @@ with c3:
         ),
         annot=True,
         fmt="d",
-        cmap="Blues",
+        cmap=CRIMSON_CMAP,
         ax=ax,
         cbar=False,
     )
@@ -683,7 +697,7 @@ with roc_col:
     ax4.plot(
         fpr,
         tpr,
-        color=ACCENT,
+        color=CRIMSON,
         linewidth=2.4,
         label=f"AUC = {auc_score:.2f}",
     )
