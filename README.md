@@ -5,6 +5,20 @@ transaction dataset and get live KPIs, class-balancing with SMOTE, model trainin
 and comparison, and an anomaly-detection view — all rendered on the fly, no
 pre-trained model required to get started.
 
+## Screenshots
+
+| Dashboard overview |
+| --- |
+| ![Dashboard overview](screenshots/01-overview.png) |
+
+| Class balancing (SMOTE) |
+| --- |
+| ![Class balancing](screenshots/02-class-balancing.png) |
+
+| Model comparison, ROC curve & anomaly detection |
+| --- |
+| ![Model comparison](screenshots/03-model-comparison.png) |
+
 ## Features
 
 - **CSV/Excel upload** — or falls back to the bundled sample dataset
