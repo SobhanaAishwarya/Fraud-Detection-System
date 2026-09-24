@@ -7,11 +7,11 @@ Everything is exposed through a Streamlit dashboard.
 
 Python · Scikit-learn · TensorFlow · imbalanced-learn · Streamlit
 
-> Built during my Data Science internship at Codec Technologies (May – June 2025).
+> Built during my Data Science internship at Codec Technologies (May - June 2025).
 
 ## The problem
 
-Fraud is rare — which is exactly what makes it hard. A model can reach high
+Fraud is rare - which is exactly what makes it hard. A model can reach high
 accuracy by labelling every transaction as legitimate and still miss every
 fraud case. This project handles the imbalance explicitly and adds an
 unsupervised check that doesn't depend on labels at all.
@@ -31,7 +31,7 @@ Transactions ─► detect label column ─► scale ─┬─► SMOTE ─► t
 
 - **Upload a CSV/Excel file**, or use the bundled 500-transaction sample
 - **Automatic target detection** for common label columns (`Class`, `Fraud`, `label`, `target`)
-- **KPI cards** — total transactions, fraud count, legitimate count, fraud rate
+- **KPI cards** - total transactions, fraud count, legitimate count, fraud rate
 - **Model comparison** and **ROC curve**
 - **Anomaly view** from Isolation Forest, independent of the labels
 - **Excel export** of per-transaction predictions and probabilities
@@ -74,7 +74,7 @@ Leave the uploader empty to use the bundled sample dataset.
 
 | File | Purpose |
 |---|---|
-| `app.py` | Streamlit dashboard — the full pipeline runs on each upload |
+| `app.py` | Streamlit dashboard - the full pipeline runs on each upload |
 | `fraud_detection_system.ipynb` | Notebook with the full analysis, including the autoencoder |
 | `fraud_model.pkl` / `scaler.pkl` | Model and scaler saved from the notebook |
 | `fraud_detection_dataset_500.csv` | Sample dataset (500 labelled transactions) |
