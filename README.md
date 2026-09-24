@@ -86,3 +86,7 @@ Leave the uploader empty to use the bundled sample dataset.
 - Report precision, recall and PR-AUC for every model, not only accuracy
 - Tune the decision threshold for the cost of a missed fraud vs. a false alarm
 - Bring the autoencoder into the dashboard next to Isolation Forest
+
+---
+
+© 2026 Kantapalli Sobhana Aishwarya. All rights reserved. Shared for portfolio viewing; please ask before reusing.
