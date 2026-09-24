@@ -5,7 +5,6 @@ supervised classifiers trained on labelled fraud, and unsupervised anomaly
 detection that looks for transactions that simply don't fit the pattern.
 Everything is exposed through a Streamlit dashboard.
 
-**[Live demo](https://fraud-detection-system-8gc4cp5aef3ekyxqpavmn2.streamlit.app/)** ·
 Python · Scikit-learn · TensorFlow · imbalanced-learn · Streamlit
 
 > Built during my Data Science internship at Codec Technologies (May – June 2025).
